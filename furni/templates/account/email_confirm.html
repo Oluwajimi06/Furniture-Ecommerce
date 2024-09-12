@@ -1,0 +1,60 @@
+{% extends "sitepages/base1.html" %}
+{% load static %}
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+
+
+{% block homepage_content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Confirm Email Address</h1>
+                    <p class="lead">Confirm your Email Address.</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Placeholder for future content -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5" style="height: 200px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            {% if confirmation %}
+                {% user_display confirmation.email_address.user as user_display %}
+                {% if can_confirm %}
+                    <p class="mb-4">
+                        {% blocktrans with confirmation.email_address.email as email %}
+                        Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.
+                        {% endblocktrans %}
+                    </p>
+                    {% url 'account_confirm_email' confirmation.key as action_url %}
+                    <form method="post" action="{{ action_url }}" class="text-center">
+                        {% csrf_token %}
+                        {{ redirect_field }}
+                        <button type="submit" class="btn btn-primary">
+                            {% trans 'Confirm' %}
+                        </button>
+                    </form>
+                {% else %}
+                    <p class="text-danger">
+                        {% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different account.{% endblocktrans %}
+                    </p>
+                {% endif %}
+            {% else %}
+                {% url 'account_email' as email_url %}
+                <p class="text-danger">
+                    {% blocktrans %}This email confirmation link has expired or is invalid. Please <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{%endblock%}

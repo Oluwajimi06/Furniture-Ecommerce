@@ -1,0 +1,135 @@
+{% extends 'sitepages/base1.html' %}
+{% load static %}
+{% block homepage_content %}
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Cart</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Display success and error messages -->
+{% if messages %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  {% for message in messages %}
+                      {{ message }}
+                  {% endfor %}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+{% endif %}
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post" action="{% url 'sitepages:update_cart' %}">
+                {% csrf_token %}
+                <div class="site-blocks-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-total">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr>
+                                <td class="product-thumbnail">
+                                    <img src="{% if item.image %}{{ item.image }}{% else %}{% static 'default_image.jpg' %}{% endif %}" alt="{{ item.name }}" class="img-fluid">
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black">{{ item.name }}</h2>
+                                </td>
+                                <td>${{ item.price }}</td>
+                                <td>
+                                    <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
+                                        <input type="number" name="quantity_{{ item.product.id }}" class="form-control text-center quantity-amount" value="{{ item.quantity }}" min="1">
+                                    </div>
+                                </td>
+                                <td>${{ item.total_price }}</td>
+                                <td>
+                                    <a href="{% url 'sitepages:remove_from_cart' item.product.id %}" class="btn btn-black btn-sm">X</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">Your cart is empty.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-outline-black btn-sm btn-block">Update Cart</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <a href="{% url 'sitepages:shoppage' %}" class="btn btn-outline-black btn-sm btn-block">Continue Shopping</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+
+            {% if cart_items %}
+            <div class="col-md-6 pl-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12 text-right border-bottom mb-5">
+                                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                            </div>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <span class="text-black">Subtotal</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">${{ cart_total }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <span class="text-black">Total</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">${{ cart_total }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Proceed To Checkout Form -->
+                        <form method="post" action="{% url 'sitepages:checkoutpage' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

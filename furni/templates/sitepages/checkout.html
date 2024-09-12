@@ -1,0 +1,185 @@
+{% extends 'sitepages/base1.html'%}
+{% load static %}
+{% block homepage_content%}
+
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Checkout</h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+		{% if messages %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  {% for message in messages %}
+                      {{ message }}
+                  {% endfor %}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+        {% endif %}
+
+		<div class="untree_co-section">
+		    <div class="container">
+				{% if request.user.is_authenticated %}
+
+				{% else %}
+		      <div class="row mb-5">
+		        <div class="col-md-12">
+		          <div class="border p-4 rounded" role="alert">
+		            Returning customer? <a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Click here to login</a>
+
+		          </div>
+		        </div>
+		      </div>
+			  {% endif %}
+		      <div class="row">
+				<div class="col-md-6 mb-5 mb-md-0">
+					<h2 class="h3 mb-3 text-black">Shipping Details</h2>
+					<div class="p-3 p-lg-5 border bg-white">
+						<form method="POST" action="{% url 'sitepages:checkoutpage' %}">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
+								<select id="c_country" class="form-control" name="c_country">
+									<option value="">Select a country</option>
+									<option value="United states">United states</option>    
+									<option value="France">France</option>    
+									<option value="Belgium">Belgium</option>    
+									<option value="United Kingdom">United Kingdom</option>    
+									<option value="Nigeria">Nigeria</option>
+									<option value="Australia">Australia</option>
+									<option value="Canada">Canada</option>    
+									<!-- Add more options as needed -->
+								</select>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-6">
+									<label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_fname" name="c_fname">
+								</div>
+								<div class="col-md-6">
+									<label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_lname" name="c_lname">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12">
+									<label for="c_address" class="text-black">Address <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_address" name="c_address" placeholder="Street address">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-6">
+									<label for="c_state_country" class="text-black">State / Country <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_state_country" name="c_state_country">
+								</div>
+								<div class="col-md-6">
+									<label for="c_postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_postal_zip" name="c_postal_zip">
+								</div>
+							</div>
+							<div class="form-group row mb-5">
+								<div class="col-md-6">
+									<label for="c_email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_email_address" name="c_email_address">
+								</div>
+								<div class="col-md-6">
+									<label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="c_phone" name="c_phone" placeholder="Phone Number">
+								</div>
+							</div>
+
+							 <!-- Add place order hidden field -->
+							 <input type="hidden" name="place_order" value="1">
+
+							<div class="form-group">
+								<button type="submit" class="btn btn-black btn-sm">Place Order</button>
+							</div>
+						</form>
+					</div>
+				</div>
+		        <div class="col-md-6">
+
+					<div class="row mb-5">
+						<div class="col-md-12">
+							<h2 class="h3 mb-3 text-black">Coupon Code</h2>
+							<div class="p-3 p-lg-5 border bg-white">
+								<form method="POST" action="{% url 'sitepages:checkoutpage' %}">
+									{% csrf_token %}
+									<label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+									<div class="input-group w-75 couponcode-wrap">
+										<input type="text" class="form-control me-2" id="c_code" name="coupon_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+										<div class="input-group-append">
+											<button class="btn btn-black btn-sm" type="submit" id="button-addon2">Apply</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+	
+
+					<div class="row mb-5">
+						<div class="col-md-12">
+							<h2 class="h3 mb-3 text-black">Your Order</h2>
+							<div class="p-3 p-lg-5 border bg-white">
+								<table class="table site-block-order-table mb-5">
+									<thead>
+										<tr>
+											<th>Product</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for item in cart_items %}
+										<tr>
+											<td>{{ item.name }} <strong class="mx-2">x</strong> {{ item.quantity }}</td>
+											<td>${{ item.total_price }}</td>
+										</tr>
+										{% endfor %}
+										<tr>
+											<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+											<td class="text-black">${{ cart_subtotal }}</td>
+										</tr>
+										{% if applied_coupon %}
+										<tr>
+											<td class="text-black font-weight-bold"><strong>Coupon Discount</strong></td>
+											<td class="text-black">-${{ coupon_discount }}</td>
+										</tr>
+										<tr>
+											<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+											<td class="text-black font-weight-bold"><strong>${{ cart_total }}</strong></td>
+										</tr>
+										{% else %}
+										<tr>
+											<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+											<td class="text-black font-weight-bold"><strong>${{ cart_total }}</strong></td>
+										</tr>
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+	
+
+		              </div>
+		            </div>
+		          </div>
+
+		        </div>
+		      </div>
+		      <!-- </form> -->
+		    </div>
+		  </div>
+
+{%endblock%}	

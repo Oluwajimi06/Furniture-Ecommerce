@@ -1,0 +1,150 @@
+{% extends "sitepages/base1.html" %}
+{% load static %}
+{% block homepage_content %}
+{% load allauth i18n %}
+<style>
+    .gsi-material-button {
+        width: 100%; /* Makes the button full-width of its container */
+        max-width: 300px; /* Adjust the maximum width as needed */
+        padding: 8px 16px; /* Adjust padding for a smaller button */
+        font-size: 14px; /* Smaller font size */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: #447f3f; /* Google blue color */
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .gsi-material-button-content-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .gsi-material-button-icon {
+        margin-right: 8px; /* Space between icon and text */
+        width: 24px; /* Adjust icon size */
+        height: 24px;
+    }
+
+    .gsi-material-button-contents {
+        display: inline-block;
+    }
+    .card {
+        border-radius: 30px; /* Adds border-radius to the form's container */
+    }
+</style>
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Sign Up</h1>
+                    <p class="lead">Create your account to start exploring.</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Placeholder for future content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5  p-4" style="height: 900px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center">{% trans "Create Your Account" %}</h2>
+                    <p class="text-center">{% blocktranslate %}Already have an account? <a href="{{ login_url }}">Sign in</a>.{% endblocktranslate %}</p>
+
+                    {% if not SOCIALACCOUNT_ONLY %}
+                        {% url 'account_signup' as action_url %}
+                        <form method="post" action="{{ action_url }}">
+                            {% csrf_token %}
+                            
+                            <div class="form-group mb-3">
+                                {{ form.username.label_tag }}<br>
+                                <input type="text" name="{{ form.username.name }}" value="{{ form.username.value }}" class="form-control" required>
+                                {% if form.username.help_text %}
+                                    <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.username.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="form-group mb-3">
+                                {{ form.email.label_tag }}<br>
+                                <input type="email" name="{{ form.email.name }}" value="{{ form.email.value }}" class="form-control" required>
+                                {% if form.email.help_text %}
+                                    <small class="form-text text-muted">{{ form.email.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.email.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="form-group mb-3">
+                                {{ form.password1.label_tag }}<br>
+                                <input type="password" name="{{ form.password1.name }}" class="form-control" required>
+                                {% if form.password1.help_text %}
+                                    <small class="form-text text-muted">{{ form.password1.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.password1.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="form-group mb-3">
+                                {{ form.password2.label_tag }}<br>
+                                <input type="password" name="{{ form.password2.name }}" class="form-control" required>
+                                {% if form.password2.help_text %}
+                                    <small class="form-text text-muted">{{ form.password2.help_text }}</small>
+                                {% endif %}
+                                {% for error in form.password2.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        
+                            {{ redirect_field }}
+                            <button type="submit" class="btn btn-primary btn-block">{% trans "Sign Up" %}</button>
+                        </form>
+                        
+                    {% endif %}
+
+                    {% if SOCIALACCOUNT_ENABLED %}
+                        <div class="text-center mt-4">
+                            <h2>Or</h2>
+                            <a title="Google" href="/accounts/google/login/?process=login" style="text-decoration: none;">
+                            <button class="gsi-material-button">
+                                <div class="gsi-material-button-state"></div>
+                                <div class="gsi-material-button-content-wrapper">
+                                  <div class="gsi-material-button-icon">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
+                                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                                      <path fill="none" d="M0 0h48v48H0z"></path>
+                                    </svg>
+                                  </div>
+                                  <span class="gsi-material-button-contents">Sign up with Google</span>
+                                  <span style="display: none;">Sign up with Google</span>
+                                </div>
+                              </button>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

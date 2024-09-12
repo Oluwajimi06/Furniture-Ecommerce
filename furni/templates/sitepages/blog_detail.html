@@ -1,0 +1,42 @@
+{% extends 'sitepages/base1.html'%}
+{% load static %}
+{% block homepage_content%}
+
+<!-- Start Hero Section -->
+<div class="hero">
+	<div class="container">
+		<div class="row justify-content-between">
+			<div class="col-lg-5">
+				<div class="intro-excerpt">
+					<h1>{{ blog.title }}</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Start Why Choose Us Section -->
+<div class="why-choose-section" style="height: 900px;">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-6">
+                <h2 class="section-title">{{ blog.title }}</h2>
+                <p>{{ blog.content }}</p> <!-- Blog content here -->
+            </div>
+
+            <div class="col-lg-6"> <!-- Changed to col-lg-6 to match the width of the content column -->
+                <div>
+                    <img src="{{ blog.image.url }}" alt="Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Why Choose Us Section -->
+
+
+
+
+
+{%endblock%}

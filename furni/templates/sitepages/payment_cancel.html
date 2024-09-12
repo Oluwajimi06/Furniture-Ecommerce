@@ -1,0 +1,51 @@
+{% extends 'sitepages/base1.html' %}
+{% load static %}
+{% block homepage_content %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Payment Cancelled</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Display success and error messages -->
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center pt-5">
+                <span class="display-3 thankyou-icon text-danger">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle mb-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M16 8a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm-1.5 0A6.5 6.5 0 1 0 1.5 8 6.5 6.5 0 0 0 14.5 8zM8.354 7.646a.5.5 0 0 1 0-.708L10.707 5.293a.5.5 0 0 1 .708.708L9.707 8l1.708 1.707a.5.5 0 0 1-.708.708L8.354 8.707a.5.5 0 0 1 0-.708z"/>
+                        <path fill-rule="evenodd" d="M5.293 5.293a.5.5 0 0 1 .707 0L8 7.293l1.5-1.5a.5.5 0 0 1 .708.708L8.707 8l1.5 1.5a.5.5 0 0 1-.708.708L8 8.707l-1.5 1.5a.5.5 0 0 1-.708-.708L7.293 8 5.793 6.5a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </span>
+                <h2 class="display-3 text-black">Payment Failed</h2>
+                <p class="lead mb-5">Your payment was cancelled. Please try again.</p>
+                <p><a href="{% url 'sitepages:checkoutpage' %}" class="btn btn-sm btn-outline-black">Back to Checkout</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

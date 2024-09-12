@@ -1,0 +1,81 @@
+{% extends "sitepages/base1.html" %}
+{% load static %}
+{% block homepage_content %}
+{% load i18n %}
+{% load allauth %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Account Connections</h1>
+                    <p class="lead">You can sign in to your account using any of the following third-party accounts.</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Placeholder for future content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+
+<div class="container my-5" style="height: 500px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h4 mb-4 text-center">
+                        {% trans "Account Connections" %}
+                    </h1>
+
+                    {% if form.accounts %}
+                        <p class="mb-4">
+                            {% blocktrans %}You can sign in to your account using any of the following third-party accounts:{% endblocktrans %}
+                        </p>
+
+                        <form method="post" action="{% url 'socialaccount_connections' %}">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                {% for acc in form.fields.account.choices %}
+                                    {% with account=acc.0.instance.get_provider_account %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="account" id="id_account_{{ account.account.pk }}" value="{{ account.account.pk }}">
+                                            <label class="form-check-label" for="id_account_{{ account.account.pk }}">
+                                                {{ account }} 
+                                                <span class="badge bg-secondary ms-2">
+                                                    {{ account.get_brand.name }}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-danger">
+                                    {% trans 'Remove' %}
+                                </button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p class="text-center">
+                            {% trans 'You currently have no third-party accounts connected to this account.' %}
+                        </p>
+                    {% endif %}
+
+                    <h2 class="h5 mt-5 mb-3 text-center">
+                        {% trans 'Add a Third-Party Account' %}
+                    </h2>
+
+                    {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
+                    {% include "socialaccount/snippets/login_extra.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

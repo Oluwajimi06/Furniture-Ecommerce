@@ -1,0 +1,50 @@
+{% extends "sitepages/base1.html" %}
+
+{% block homepage_content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>User Profile</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Optional additional content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5" style="height: 500px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h2 class="h4">Welcome, {{ user.username }}!</h2>
+                    <p class="text-muted">Manage your account settings below:</p>
+                    <div class="list-group">
+                        <a href="{% url 'sitepages:order_history' %}" class="list-group-item list-group-item-action">
+                            Order History  
+                        </a>
+                        <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">
+                            Change Email
+                        </a>
+                        <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">
+                            Change Password
+                        </a>
+                        <a href="{% url 'socialaccount_connections' %}" class="list-group-item list-group-item-action">
+                            Account Connections
+                        </a>
+                        <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

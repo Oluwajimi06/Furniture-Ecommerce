@@ -1,0 +1,44 @@
+{% extends 'sitepages/base1.html' %}
+{% load static %}
+{% block homepage_content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+				<div class="intro-excerpt">
+					<h1>Order Details</h1>
+				</div>
+			</div>
+            <div class="col-lg-7">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+
+
+<div class="container my-5" style="height: 600px;">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">Order Summary</h2>
+            <p><strong>Date:</strong> {{ order.created_at|date:"M d, Y" }}</p>
+            <p><strong>Total Amount:</strong> ${{ order.total_amount }}</p>
+
+            <h3 class="mt-4">Items</h3>
+            <ul class="list-group">
+                {% for item in order_items %}
+                <li class="list-group-item">
+                    {{ item.quantity }}x {{ item.product.name }} - ${{ item.price }}
+                </li>
+                {% endfor %}
+            </ul>
+
+            <a href="{% url 'sitepages:order_history' %}" class="btn btn-secondary mt-4">Back to Order History</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

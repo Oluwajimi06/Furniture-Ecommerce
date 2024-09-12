@@ -1,0 +1,56 @@
+{% extends 'sitepages/base1.html' %}
+{% load static %}
+{% block homepage_content %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Order Confirmation</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Additional content can be added here -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5" style="height: 900px;">
+    <div class="row">
+        <div class="col-md-6 mb-5 mb-md-0">
+            <h2 class="h3 mb-3 text-black">Shipping Details</h2>
+            <div class="p-4 border bg-white rounded">
+                <h3 class="h4 mb-3">Shipping Information</h3>
+                <p><strong>First Name:</strong> {{ shipping_data.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ shipping_data.last_name }}</p>
+                <p><strong>Country:</strong> {{ shipping_data.country }}</p>
+                <p><strong>Address:</strong> {{ shipping_data.address }}, {{ shipping_data.state_country }} {{ shipping_data.postal_zip }}</p>
+                <p><strong>Phone:</strong> {{ shipping_data.phone }}</p>
+                <p><strong>Email:</strong> {{ shipping_data.email }}</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="h3 mb-3 text-black">Order Summary</h2>
+            <div class="p-4 border bg-white rounded">
+                <p><strong>Cart Total:</strong> ${{ cart_total }}</p>
+                <p><strong>Coupon Discount:</strong> ${{ coupon_discount }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <form method="post" action="{% url 'sitepages:stripe_payment' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">Proceed to Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

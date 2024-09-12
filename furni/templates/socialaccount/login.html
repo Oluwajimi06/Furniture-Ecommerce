@@ -1,0 +1,58 @@
+{% extends "sitepages/base1.html" %}
+{% load static %}
+{% block homepage_content %}
+{% load i18n %}
+{% load allauth %}
+
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Sign In</h1>
+                    <p class="lead">Sign into your account to via Google.</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Placeholder for future content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5 p-4" style="height: 300px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if process == "connect" %}
+                        <h2 class="text-center">
+                            {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+                        </h2>
+                        <p class="text-center">
+                            {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+                        </p>
+                    {% else %}
+                        <h2 class="text-center">
+                            {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+                        </h2>
+                        <p class="text-center">
+                            {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+                        </p>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-block">
+                            {% trans "Continue" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

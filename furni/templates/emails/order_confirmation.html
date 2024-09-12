@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        /* Inline styles are preferred in emails */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .email-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333333;
+        }
+        p {
+            color: #555555;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h2>Order Confirmation</h2>
+        <p>Dear {{ first_name }},</p>
+        <p>Thank you for your order. Here are the details:</p>
+
+        <h3>Shipping Information:</h3>
+        <p>
+           Address: {{ shipping_data.address }} <br>
+           State/Country: {{ shipping_data.state_country }} <br>
+           Postal/Zip: {{ shipping_data.postal_zip }} <br>
+           Country: {{ shipping_data.country }}
+        </p>
+
+        <h3>Order Items:</h3>
+        <ul>
+            {% for item in order_items %}
+            <li>{{ item.quantity }}x {{ item.product.name }} - ${{ item.price }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>Total: ${{ total_amount }}</p>
+
+        <p>We will notify you when your order has been shipped.</p>
+        <p>Thank you for shopping with us!</p>
+    </div>
+</body>
+</html>

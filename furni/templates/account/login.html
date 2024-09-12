@@ -1,0 +1,154 @@
+{% extends "sitepages/base1.html" %}
+{% load static %}
+{% block homepage_content %}
+{% load i18n %}
+{% load allauth account %}
+
+<style>
+    .gsi-material-button {
+        width: 100%;
+        max-width: 300px;
+        padding: 8px 16px;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: #447f3f;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .gsi-material-button-content-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .gsi-material-button-icon {
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .gsi-material-button-contents {
+        display: inline-block;
+    }
+
+    .card {
+        border-radius: 30px;
+    }
+
+    .alert {
+        margin-top: 15px;
+    }
+</style>
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Sign In</h1>
+                    <p class="lead">Sign into your account to continue exploring.</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Placeholder for future content -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5 p-4" style="height: 700px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center">{% trans "Sign In" %}</h2>
+
+                    {% if not SOCIALACCOUNT_ONLY %}
+                        <p class="text-center">
+                            {% blocktranslate %}
+                                If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.
+                            {% endblocktranslate %}
+                        </p>
+                        
+                        <!-- Displaying non-field errors -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Displaying messages -->
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {% url 'account_login' as login_url %}
+                        <form method="post" action="{{ login_url }}">
+                            {% csrf_token %}
+                            <div class="form-group mb-3">
+                                {{ form.login.label_tag }}<br>
+                                <input type="text" name="{{ form.login.name }}" value="{{ form.login.value }}" class="form-control" required>
+                                {% for error in form.login.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                {{ form.password.label_tag }}<br>
+                                <input type="password" name="{{ form.password.name }}" class="form-control" required>
+                                {% for error in form.password.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            {{ redirect_field }}
+
+                            <button type="submit" class="btn btn-primary btn-block">{% trans "Sign In" %}</button>
+                        </form>
+                        {% url 'account_reset_password' as reset_password_url %}
+                        <p class="text-center mt-3">
+                            <a href="{{ reset_password_url }}">{% trans "Forgot Password?" %}</a>
+                        </p>
+                    {% endif %}
+
+                    {% if SOCIALACCOUNT_ENABLED %}
+                        <div class="text-center mt-4">
+                            <h2>Or</h2>
+                            <a title="Google" href="/accounts/google/login/?process=login" style="text-decoration: none;">
+                                <button class="gsi-material-button">
+                                    <div class="gsi-material-button-state"></div>
+                                    <div class="gsi-material-button-content-wrapper">
+                                        <div class="gsi-material-button-icon">
+                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
+                                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                                                <path fill="none" d="M0 0h48v48H0z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="gsi-material-button-contents">Sign in with Google</span>
+                                        <span style="display: none;">Sign in with Google</span>
+                                    </div>
+                                </button>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

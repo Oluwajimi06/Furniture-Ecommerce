@@ -1,0 +1,65 @@
+{% extends 'sitepages/base1.html' %}
+{% load static %}
+{% block homepage_content %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+				<div class="intro-excerpt">
+					<h1>Order History</h1>
+					<p class="mb-4">Track your past orders and view details of your purchases.</p>
+				</div>
+			</div>
+            <div class="col-lg-7">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="container my-5" style="height: 600px;">
+    <h2 class="mb-4 text-center">Your Order History</h2>
+
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>
+                            <span class="
+                                {% if order.status == 'pending' %}text-warning
+                                {% elif order.status == 'completed' %}text-success
+                                {% else %}text-secondary{% endif %}
+                            ">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'sitepages:order_detail' order.id %}" class="btn btn-info btn-small">View Details</a>
+                        </td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p>You have no orders yet.</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
